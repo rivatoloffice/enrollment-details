@@ -53,7 +53,10 @@
 </head>
 <body>
 
-  <form id="enrollForm" class="w-full max-w-2xl space-y-6 p-4">
+  <!-- ✅ Netlify form setup -->
+  <form id="enrollForm" name="enrollForm" method="POST" data-netlify="true" class="w-full max-w-2xl space-y-6 p-4">
+    <input type="hidden" name="form-name" value="enrollForm">
+
     <div class="flex justify-center mb-4">
       <img src="logo.png" alt="Logo" width="200" height="200" class="rounded-full shadow-xl">
     </div>
@@ -125,7 +128,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
-  const btn = document.getElementById("submitBtn");
   const canvas = document.getElementById("confetti-canvas");
   const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
   const form = document.getElementById("enrollForm");
@@ -138,33 +140,21 @@
       return;
     }
 
-    // Confetti
+    // 🎉 Confetti
     myConfetti({ particleCount: 300, spread: 360, startVelocity: 60, ticks: 200, origin: { x: 0.5, y: 0.5 }, shapes: ["star"], scalar: 1.4, colors: ["#FFD700", "#FFEC8B", "#FFFACD", "#FDD017"] });
     myConfetti({ particleCount: 150, spread: 360, startVelocity: 50, ticks: 180, origin: { x: 0.5, y: 0.5 }, shapes: ["circle"], scalar: 0.8, colors: ["#ffffff", "#ffffe0"] });
 
-    // Collect form data
+    // ✅ Send form data to Netlify
     const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-      if (data[key]) {
-        data[key] += ", " + value;
-      } else {
-        data[key] = value;
-      }
-    });
 
-    // Send to Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycby2JePo77NatoCfpnBjoz4Xll6HG0zgPdeVBBzHVAcK8NmBaUPTT3PVBFxhdRGnUMM5fw/exec", {
+    fetch("/", {
       method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
+      body: formData
     })
-    .then((res) => res.json())
-    .then((res) => console.log("Success!", res))
+    .then(() => {
+      window.location.href = "thankyou.html"; // Redirect after success
+    })
     .catch((err) => console.error("Error!", err));
-
-    // Redirect
-    setTimeout(() => { window.location.href = "thankyou.html"; }, 2000);
   });
 
   function shootStar(e) {
@@ -194,4 +184,3 @@
 </script>
 </body>
 </html>
-
