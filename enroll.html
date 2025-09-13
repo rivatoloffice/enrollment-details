@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Enrollment Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Fredoka', sans-serif;
+      background: url("your-ghibli-background.png") no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .slab { opacity: 0; transform: translateY(40px); animation: floatUp 0.8s ease forwards; }
+    .slab:nth-child(1) { animation-delay: 0.2s; }
+    .slab:nth-child(2) { animation-delay: 0.4s; }
+    .slab:nth-child(3) { animation-delay: 0.6s; }
+    .slab:nth-child(4) { animation-delay: 0.8s; }
+    @keyframes floatUp { to { opacity: 1; transform: translateY(0); } }
+    input[type="text"], input[type="number"], input[type="email"], input[type="tel"] {
+      width: 100%; padding: 1rem; font-size: 0.9rem; text-align: center;
+      border-radius: 10px; background: rgba(255, 255, 255, 0.9); outline: none; transition: 0.3s;
+    }
+    input:focus { box-shadow: 0 0 12px rgba(0, 0, 0, 0.3); transform: scale(1.02); }
+    .choice-container { display: flex; align-items: center; gap: 0.6rem; }
+    .choice-container input[type="checkbox"], .choice-container input[type="radio"] {
+      appearance: none; width: 24px; height: 24px; border: 2px solid #20373B; border-radius: 50%;
+      position: relative; cursor: pointer; outline: none; transition: 0.2s; background: #fff;
+    }
+    .choice-container input[type="checkbox"]:checked, .choice-container input[type="radio"]:checked {
+      background: radial-gradient(circle, white 30%, #FFD700 100%); border-color: #FFD700;
+      box-shadow: 0 0 8px white, 0 0 16px #FFD700, 0 0 24px white;
+      transition: box-shadow 0.3s ease-in-out, background 0.3s ease-in-out;
+    }
+    .star {
+      position: absolute; width: 20px; height: 20px;
+      background: radial-gradient(circle at 30% 30%, #fffacd, #ffd700, #ffec8b);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      opacity: 0; pointer-events: none; animation: flyStar 0.8s forwards;
+    }
+    @keyframes flyStar {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -40px) scale(1.3) rotate(15deg); }
+      100% { opacity: 0; transform: translate(80px, 0) scale(0.8) rotate(-15deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <form id="enrollForm" class="w-full max-w-2xl space-y-6 p-4">
+    <div class="flex justify-center mb-4">
+      <img src="logo.png" alt="Logo" width="200" height="200" class="rounded-full shadow-xl">
+    </div>
+
+    <!-- Basic Details -->
+    <div class="slab p-6 rounded-xl shadow-lg text-black" style="background:#C3E7F1;">
+      <h2 class="text-2xl font-semibold mb-4">Basic Details</h2>
+      <input type="text" name="name" placeholder="Full Name" required> 
+      <input type="number" name="age" placeholder="Age" class="mt-3" required>
+      <input type="text" name="class" placeholder="Class / Grade" class="mt-3" required>
+      <input type="text" name="school" placeholder="School Name" class="mt-3" required> 
+    </div>
+
+    <!-- Parent/Guardian -->
+    <div class="slab p-6 rounded-xl shadow-lg text-white" style="background:#519CAB;">
+      <h2 class="text-2xl font-semibold mb-4">Parent/Guardian</h2>
+      <input type="text" name="parent" placeholder="Parent/Guardian Name" class="text-black" required>
+      <input type="tel" name="phone" placeholder="Phone Number" class="mt-3 text-black" required>
+      <input type="email" name="email" placeholder="Email ID" class="mt-3 text-black"> 
+    </div>
+
+    <!-- Academic Details -->
+    <div class="slab p-6 rounded-xl shadow-lg text-black" style="background:#FFC64F;">
+      <h2 class="text-2xl font-semibold mb-4">Academic Details</h2>
+      <p class="mb-4">Subjects You Learn</p>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="choice-container"><input type="checkbox" name="subjects" value="Math" onclick="shootStar(event)"> <span>Math</span></label>
+        <label class="choice-container"><input type="checkbox" name="subjects" value="Science" onclick="shootStar(event)"> <span>Science</span></label>
+        <label class="choice-container"><input type="checkbox" name="subjects" value="English" onclick="shootStar(event)"> <span>English</span></label>
+        <label class="choice-container"><input type="checkbox" name="subjects" value="Social Studies" onclick="shootStar(event)"> <span>Social Studies</span></label>
+        <label class="choice-container mb-4"><input type="checkbox" name="subjects" value="Hindi" onclick="shootStar(event)"> <span>Hindi</span></label>
+        <label class="choice-container"><input type="checkbox" id="otherSubject" name="subjects" value="Other" onclick="toggleOtherInput(event)"> <span>Other</span></label>
+      </div>
+      <input type="text" id="otherSubjectInput" name="other" placeholder="Please specify other subjects" class="mt-3 hidden w-full p-2 rounded-lg border border-gray-300">
+      <p class="mb-4">Current Board</p>
+      <div class="grid grid-cols-2 gap-3 text-sm mt-2">
+        <label class="choice-container"><input type="radio" name="board" value="CBSE"> <span>CBSE</span></label>
+        <label class="choice-container"><input type="radio" name="board" value="ICSE"> <span>ICSE</span></label>
+        <label class="choice-container"><input type="radio" name="board" value="IB"> <span>IB</span></label>
+        <label class="choice-container"><input type="radio" name="board" value="IGCSE"> <span>IGCSE</span></label>
+        <label class="choice-container"><input type="radio" name="board" value="State Board"> <span>State Board</span></label>
+      </div>
+    </div>
+
+    <!-- Student’s Academic View -->
+    <div class="slab p-6 rounded-xl shadow-lg text-white" style="background:#20373B;">
+      <h2 class="text-2xl font-semibold mb-4">Student’s Academic View</h2>
+      <input type="text" name="easy" placeholder="Which subject do you find easiest?" class="text-black">
+      <input type="text" name="hard" placeholder="Which subject do you struggle with most?" class="mt-3 text-black">
+      <p class="mt-4">How do you feel about your studies?</p>
+      <div class="space-y-2 text-sm mt-2">
+        <label class="choice-container"><input type="radio" name="confidence" value="Very confident"> <span>Very confident</span></label><br>
+        <label class="choice-container"><input type="radio" name="confidence" value="Sometimes confident"> <span>Sometimes confident</span></label><br>
+        <label class="choice-container"><input type="radio" name="confidence" value="Need a lot of support"> <span>Need a lot of support</span></label>
+      </div>
+    </div>
+
+    <div class="text-center mt-6">
+      <button id="submitBtn" type="submit" class="px-8 py-4 text-xl font-bold text-black rounded-full 
+             bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500
+             shadow-2xl transform transition-all duration-300 
+             hover:scale-110 hover:shadow-yellow-500/50 focus:outline-none" aria-label="Start My Journey">
+        Start My Journey
+      </button>
+    </div>
+
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none w-full h-full"></canvas>
+  </form>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+  const btn = document.getElementById("submitBtn");
+  const canvas = document.getElementById("confetti-canvas");
+  const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
+  const form = document.getElementById("enrollForm");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    // Confetti
+    myConfetti({ particleCount: 300, spread: 360, startVelocity: 60, ticks: 200, origin: { x: 0.5, y: 0.5 }, shapes: ["star"], scalar: 1.4, colors: ["#FFD700", "#FFEC8B", "#FFFACD", "#FDD017"] });
+    myConfetti({ particleCount: 150, spread: 360, startVelocity: 50, ticks: 180, origin: { x: 0.5, y: 0.5 }, shapes: ["circle"], scalar: 0.8, colors: ["#ffffff", "#ffffe0"] });
+
+    // Collect form data
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+      if (data[key]) {
+        data[key] += ", " + value;
+      } else {
+        data[key] = value;
+      }
+    });
+
+    // Send to Google Sheets
+    fetch("https://script.google.com/macros/s/AKfycby3_sd0VXO0d-PB6V29oKQwPQ_NyWSVbTMIYn_6JsIcvEAL7xO-GhuXyLT-x1yQXz4wKQ/exec", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((res) => res.json())
+    .then((res) => console.log("Success!", res))
+    .catch((err) => console.error("Error!", err));
+
+    // Redirect
+    setTimeout(() => { window.location.href = "thankyou.html"; }, 2000);
+  });
+
+  function shootStar(e) {
+    if (e.target.checked) {
+      const star = document.createElement("span");
+      star.classList.add("star");
+      star.innerHTML = "⭐";
+      document.body.appendChild(star);
+      const rect = e.target.getBoundingClientRect();
+      star.style.left = rect.left + "px";
+      star.style.top = rect.top + "px";
+      setTimeout(() => { star.remove(); }, 900);
+    }
+  }
+
+  function toggleOtherInput(e) {
+    const input = document.getElementById("otherSubjectInput");
+    if (e.target.checked) {
+      input.classList.remove("hidden");
+      input.setAttribute("required", "true");
+    } else {
+      input.classList.add("hidden");
+      input.removeAttribute("required");
+      input.value = "";
+    }
+  }
+</script>
+</body>
+</html>
